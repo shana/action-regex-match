@@ -3,6 +3,31 @@ module.exports =
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 532:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.execute = void 0;
+function execute(text, regex, flags, results) {
+    const re = new RegExp(regex, flags);
+    let result = null;
+    while ((result = re.exec(text)) !== null) {
+        for (const [index, x] of result.entries()) {
+            if (results.length <= index) {
+                results[index] = x;
+            }
+            else {
+                results[index] += ` ${x}`;
+            }
+        }
+    }
+}
+exports.execute = execute;
+
+
+/***/ }),
+
 /***/ 109:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -37,25 +62,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(186));
+const execute_1 = __webpack_require__(532);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const text = core.getInput('text');
             const regex = core.getInput('regex');
             const flags = core.getInput('flags');
-            const re = new RegExp(regex, flags);
-            const result = re.exec(text);
-            if (result) {
-                for (const [index, x] of result.entries()) {
-                    if (index === 10) {
-                        return;
-                    }
-                    if (index === 0) {
-                        core.setOutput('match', x);
-                        continue;
-                    }
-                    core.setOutput(`group${index}`, x);
-                }
+            let results = [];
+            execute_1.execute(text, regex, flags, results);
+            core.setOutput('match', results[0]);
+            for (let i = 1; i < results.length; i++) {
+                core.setOutput(`group${i}`, results[i]);
             }
         }
         catch (error) {

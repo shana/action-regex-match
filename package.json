@@ -1,6 +1,6 @@
 {
   "name": "action-regex-match",
-  "version": "2.0.2",
+  "version": "2.0.2.1",
   "private": true,
   "description": "Do regex matching",
   "main": "lib/main.js",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions-ecosystem/action-regex-match.git"
+    "url": "git+https://github.com/shana/action-regex-match.git"
   },
   "keywords": [
     "actions",

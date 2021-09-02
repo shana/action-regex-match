@@ -1,30 +1,23 @@
 import * as core from '@actions/core';
+import { execute } from './execute';
 
 async function run(): Promise<void> {
+
   try {
+
     const text = core.getInput('text');
     const regex = core.getInput('regex');
     const flags = core.getInput('flags');
 
-    const re = new RegExp(regex, flags);
+    let results: string[] = [];
+    
+    execute(text, regex, flags, results);
 
-    const result = re.exec(text);
-
-    if (result) {
-      for (const [index, x] of result.entries()) {
-        if (index === 10) {
-          return;
-        }
-
-        if (index === 0) {
-          core.setOutput('match', x);
-          continue;
-        }
-
-        core.setOutput(`group${index}`, x);
-      }
+    core.setOutput('match', results[0]);
+    for (let i = 1; i < results.length; i++) {
+      core.setOutput(`group${i}`, results[i]);
     }
-  } catch (error) {
+  } catch (error: any) {
     core.error(error);
     core.setFailed(error.message);
   }
